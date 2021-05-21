@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+<meta charset="utf-8">
+<title>人大人OCR</title>
+<style>body{text-align:center}</style>
+</head>
+
+<body>
+    <h1>人大人OCR</h1>
+    <p>单张图片识别</p>
+    <form method="post" action="" enctype="multipart/form-data" >
+        <input type="file" name="OCRpic"/>
+	<input type="submit" value="提交" name="OCRpicSubmit"/>
+    </forms>
+    {% if image_path %}
+    <div id="single" style="width:100%; height:400px;">
+        <div id="pic" style="float:left;width:50%;height:100%">
+            <img src="{%static image_path%}" style="width:auto;height:auto;max-width:100%;max-height:100%">
+        </div>
+        <div id="OCRtext" style="float:right;width:50%;height:auto;">
+              {% for id in target_string %}
+                  {% if id.name or id.num %}
+                      <p>{{id.name}}</p>
+                      <p>{{id.num}}</p>
+                  {% else %}
+                      <p>未识别出结果</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    <p>批量识别，支持rar、tar、zip文件</p>
+    <form method="post" action="" enctype="multipart/form-data">
+       <input type="file" name="OCRtar"/>
+       <input type="submit" value="提交" name="OCRtarSubmit"/>
+    </form>
+    {% if show_table %}
+    <a href="{% static download_path%}" download>点击下载表格</a>
+    <div id="table" style="width:100%; height:400px;">
+        <table id="OCR_table" border="1" style="margin:auto">
+            <thead>
+                <tr>
+                    <th>图片名</th>
+                    <th>注册号</th>
+                    <th>名称</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id in target_string %}
+                <tr>
+                    <td><p>{{id.img_id}}</p></td>
+                    <td><p>{{id.num}}</p></td>
+                    <td><p>{{id.name}}</p></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</body>
+</html>
